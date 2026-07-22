@@ -256,3 +256,34 @@ Después de recibirlas:
 - No realices únicamente configuración o setup: el resultado debe permitir completar y observar la funcionalidad solicitada.
 
 **Resultado:** Se implementó `state.js` con `crearPlaylist()` y `obtenerPlaylists()` usando spread operator para inmutabilidad, una nueva sección en `index.html` para gestión de playlists, y la conexión en `ui.js` (validación de nombre vacío, creación, y `renderizarPlaylists()` siguiendo el patrón "cambia estado → llama render()"). Corregido: inconsistencia de nombre de propiedad (`nombrePlaylist` vs `nombre`) entre `state.js` y `ui.js`.
+
+
+
+## [2026-07-22] — Desarrollo de la tercera historia de usuario
+
+**Para qué:** Continuar el desarrollo progresivo, ahora con la HU-03.
+
+**Prompt:**
+
+[HISTORIA DE USUARIO]
+
+### HU-03: Agregar canciones a una playlist
+**Como** usuario de Mi Setlist,
+**quiero** agregar canciones desde los resultados de búsqueda a una playlist existente,
+**para** armar mi colección de música dentro de cada playlist.
+
+**Criterios de aceptación:**
+- Desde cada resultado de búsqueda existe una acción visible para agregar la canción a una playlist.
+- Al seleccionar la acción de agregar, el usuario puede elegir una de sus playlists existentes.
+- Después de confirmar, la canción aparece inmediatamente en el contenido de la playlist seleccionada.
+- Si el usuario intenta agregar una canción que ya se encuentra en la misma playlist, la canción no se duplica y se muestra el mensaje: "Esta canción ya está agregada a la playlist".
+
+[MODO DE TRABAJO]
+
+Mismo modo de trabajo que en HU-01 y HU-02: preguntas estratégicas antes de código, luego código en porciones pequeñas con explicación y archivo de destino.
+
+[RESTRICCIONES]
+
+Mismas restricciones que HU-01 y HU-02, aplicadas ahora solo a HU-03.
+
+**Resultado:** Se agregó `agregarCancionAPlaylist()` en `state.js` (con validación de duplicados usando `.some()`, y actualización inmutable con `.map()`), y en `ui.js` se modificó `mostrarResultados()` para incluir un `<select>` de playlists y botón "Agregar" por cada canción encontrada, con manejo de los 3 casos: sin playlist elegida, canción duplicada, y agregado exitoso.

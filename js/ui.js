@@ -1,11 +1,17 @@
 
 import {buscarcancion} from './api.js';
-
+import { crearPlaylist, obtenerPlaylists, agregarCancionAPlaylist } from './state.js';
 //referencias html 
 const inputBusqueda = document.querySelector('#inputbusqueda');  //queryselector:busca un element html y lo devuelve pa modificar
 const btnBuscar = document.querySelector('#btnbuscar');
 const mensajeBusqueda = document.querySelector('#mensajebusqueda');
 const listaResultados = document.querySelector('#listaresultados');
+
+
+const inputNombrePlaylist = document.querySelector('#nombreplaylist');
+const btnCrearPlaylist = document.querySelector('#btncrearplaylist');
+const mensajePlaylist = document.querySelector('#mensajeplaylist');
+const listaPlaylists = document.querySelector('#listaplaylists');
 
 
 btnBuscar.addEventListener('click', manejarBusqueda); // cuando click, ejecutar manejarBusqueda
@@ -45,15 +51,54 @@ async function manejarBusqueda(){
 function mostrarResultados(canciones) {  // foreach:por cada element, ejecuta este código (no genera un array nuevo)
     canciones.forEach(cancion => {
         const li = document.createElement('li'); // creamos un <li> nuevo por cada cancion con sus atributos
+        const opcionesPlaylists = obtenerPlaylists()
+            .map(p => `<option value="${p.id}">${p.nombrePlaylist}</option>`)
+            .join('');
 
-        //inner:agrega y borra anterior, strong:pone negrita 
+        //inner:agrega y borra anterior, strong:pone negrita , slect:desplegable opciones
+        //value"" opcion vacia antes q el usuario escriba(por defecto
         li.innerHTML = `
             <img src="${cancion.caratula}" alt="Carátula de ${cancion.titulo}" width="50">
-            <strong>${cancion.titulo}</strong> - ${cancion.artista} (${formatearDuracion(cancion.duracion)})`;
+            <strong>${cancion.titulo}</strong> - ${cancion.artista} (${formatearDuracion(cancion.duracion)})
+              <select class="selectplaylist">
+                <option value="">Elige una playlist</option> 
+                ${opcionesPlaylists}
+            </select>
+            <button class="btnagregar">Agregar</button>`;
 
-        listaResultados.appendChild(li); // appendchil :agregar sin borrar lo q se metio y lo mete en el ul
+ // busca el botón "Agregar" dentro de este li específico
+
+const btnAgregar = li.querySelector('.btnagregar');  
+
+// busca el select de playlists dentro de este li específico
+
+const selectPlaylist = li.querySelector('.selectplaylist'); 
+
+        btnAgregar.addEventListener('click', () => {
+            const playlistId = selectPlaylist.value;
+
+            if (playlistId === '') {
+                mensajePlaylist.textContent = 'Elige una playlist primero';
+                return;
+            }
+
+            const resultado = agregarCancionAPlaylist(playlistId, cancion);
+            mensajePlaylist.textContent = resultado.mensaje; //Accede al emnsaje de stat.js PARA Q SE MUESTRE e pamtalla
+
+            if (resultado.exito) { //solo se ejecuta si fue exitoso, es decir, si no estaba duplicado
+                renderizarPlaylists();
+            }
+        });
+
+
+        listaResultados.appendChild(li); // insertar elemento para q se vea en la pagina
     });
 }
+
+
+
+
+
 
 function formatearDuracion(ms) {
     const totalSegundos = Math.floor(ms / 1000); //mlseg entre mil, math.floor:quita decimales
@@ -65,11 +110,7 @@ function formatearDuracion(ms) {
 
 
 
-import {crearPlaylist, obtenerPlaylists} from './state.js';
-const inputNombrePlaylist = document.querySelector('#nombreplaylist');
-const btnCrearPlaylist = document.querySelector('#btncrearplaylist');
-const mensajePlaylist = document.querySelector('#mensajeplaylist');
-const listaPlaylists = document.querySelector('#listaplaylists');
+
 
 btnCrearPlaylist.addEventListener('click', manejarCrearPlaylist);
 
