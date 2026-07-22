@@ -1,14 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My-setlist </title>
-    <h1>🎵 Mi Setlist</h1>
-    <p id="app"></p>
-    <script type="module" src="js/app.js"></script>
+    <title>My-setlist</title>
 </head>
+
 <body>
-    
+ <h1>🎵 Mi Setlist </h1>
+<section>
+    <input type="text" id="inputbusqueda" placeholder="Buscar por artista o título">
+    <button id="btnbuscar"> Buscar</button>
+    <p id="mensajebusqueda">  </p>     <!-- Aquí se mostrará el estado: cargando, error, sin resultados -->
+    <ul id="listaresultados"> </ul>          <!-- Aquí se mostrarán los resultados de la búsqueda -->
+</section>
+
+<script type="module" src="js/app.js"></script> 
 </body>
 </html>
+
