@@ -255,4 +255,4 @@ Después de recibirlas:
 - Si alguna solicitud contradice el contrato técnico, indícamelo en lugar de ignorar la restricción.
 - No realices únicamente configuración o setup: el resultado debe permitir completar y observar la funcionalidad solicitada.
 
-**Resultado:** [completar cuando terminemos HU-02]
+**Resultado:** Se implementó `state.js` con `crearPlaylist()` y `obtenerPlaylists()` usando spread operator para inmutabilidad, una nueva sección en `index.html` para gestión de playlists, y la conexión en `ui.js` (validación de nombre vacío, creación, y `renderizarPlaylists()` siguiendo el patrón "cambia estado → llama render()"). Corregido: inconsistencia de nombre de propiedad (`nombrePlaylist` vs `nombre`) entre `state.js` y `ui.js`.

@@ -61,3 +61,42 @@ function formatearDuracion(ms) {
     const segundos = totalSegundos % 60; // % te da el resto de la division
     return `${minutos}:${segundos.toString().padStart(2, '0')}`;  //tostring: numero a texto, padstar: hace q siempre tenga 2 digitos
 }
+
+
+
+
+import {crearPlaylist, obtenerPlaylists} from './state.js';
+const inputNombrePlaylist = document.querySelector('#nombreplaylist');
+const btnCrearPlaylist = document.querySelector('#btncrearplaylist');
+const mensajePlaylist = document.querySelector('#mensajeplaylist');
+const listaPlaylists = document.querySelector('#listaplaylists');
+
+btnCrearPlaylist.addEventListener('click', manejarCrearPlaylist);
+
+function manejarCrearPlaylist() {
+    const nombre = inputNombrePlaylist.value.trim();
+
+    if (nombre === '') {
+        mensajePlaylist.textContent = 'Escribe un nombre para la playlist';
+        return;
+    }
+
+    crearPlaylist(nombre); 
+    mensajePlaylist.textContent = '';
+    inputNombrePlaylist.value = ''; 
+    renderizarPlaylists(); 
+}
+
+
+
+function renderizarPlaylists() {
+    listaPlaylists.innerHTML = ''; // limpia la lista antes de repintar
+
+    const playlists = obtenerPlaylists();
+
+    playlists.forEach(playlist => {
+        const li = document.createElement('li');
+        li.textContent = playlist.nombrePlaylist;
+        listaPlaylists.appendChild(li);
+    });
+}
