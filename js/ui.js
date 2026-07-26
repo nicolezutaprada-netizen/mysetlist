@@ -16,12 +16,16 @@ const listaPlaylists = document.querySelector('#listaplaylists');
 
 btnBuscar.addEventListener('click', manejarBusqueda); // cuando click, ejecutar manejarBusqueda
 
+
+//innerHTML reemplaza o borra el contenido interno de un elemento.
+//appendChild() agrega un elemento nuevo al final, sin borrar lo anterior.
+
 async function manejarBusqueda(){ 
     const termino=inputBusqueda.value.trim()  //value guarda lo q escribio el usuario en el input, trim:sin espacios inicio y final
 
     if (termino===''){
         mensajeBusqueda.textContent='Escribe algo para buscar';
-        listaResultados.innerHTML = ''; // ← agregar esta línea
+        listaResultados.innerHTML = ''; // limpiamos resultados anteriores
         return;  // corta aquí, no llama a la API
     } else{
 
@@ -46,7 +50,7 @@ async function manejarBusqueda(){
 
 }
 
-
+//option value(no se muestrqa, pero necesitamos para saber cuala eligio el usuario por el id unico) 
 //canciones :guarda lo q conincido con lo que el usuario buscó
 function mostrarResultados(canciones) {  // foreach:por cada element, ejecuta este código (no genera un array nuevo)
     canciones.forEach(cancion => {
@@ -66,13 +70,27 @@ function mostrarResultados(canciones) {  // foreach:por cada element, ejecuta es
             </select>
             <button class="btnagregar">Agregar</button>`;
 
+
  // busca el botón "Agregar" dentro de este li específico
 
 const btnAgregar = li.querySelector('.btnagregar');  
 
 // busca el select de playlists dentro de este li específico
 
-const selectPlaylist = li.querySelector('.selectplaylist'); 
+const selectPlaylist = li.querySelector('.selectplaylist');  //slectplaylist q se genera en el inner de arriba
+
+//focus:cuando entras o seleccionas el <select>(no es elegir una opción; es q selector quedó activo.)
+//click:cuando presionas el botón Agregar.
+
+selectPlaylist.addEventListener('focus', () => {   
+//Agrega la playlist q acabas de crear despeus de buscar songs a la lista de playslists
+    const opcionesActualizadas = obtenerPlaylists()  //viejas + nuevas playlists 
+        .map(p => `<option value="${p.id}">${p.nombrePlaylist}</option>`)
+        .join('');
+
+        //se agrega otra vez elige una opcion y el value vacio porque inner borra todo lo q estaba antes y si no se pone otra vez, no aparece
+    selectPlaylist.innerHTML = `<option value="">Elige una playlist</option>${opcionesActualizadas}`; 
+});
 
         btnAgregar.addEventListener('click', () => {
             const playlistId = selectPlaylist.value;
@@ -123,8 +141,8 @@ function manejarCrearPlaylist() {
     }
 
     crearPlaylist(nombre); 
-    mensajePlaylist.textContent = '';
-    inputNombrePlaylist.value = ''; 
+    mensajePlaylist.textContent = ''; //limpia el mensaje de error si lo había
+    inputNombrePlaylist.value = ''; //limpia el input
     renderizarPlaylists(); 
 }
 
@@ -133,11 +151,53 @@ function manejarCrearPlaylist() {
 function renderizarPlaylists() {
     listaPlaylists.innerHTML = ''; // limpia la lista antes de repintar
 
-    const playlists = obtenerPlaylists();
+    const playlists = obtenerPlaylists(); 
 
-    playlists.forEach(playlist => {
-        const li = document.createElement('li');
-        li.textContent = playlist.nombrePlaylist;
-        listaPlaylists.appendChild(li);
+    playlists.forEach(playlist => { //recorre cada playlist y crea un <li> para cada una
+        const li = document.createElement('li'); // crea un <li> nuevo por cada playlist
+        li.textContent = playlist.nombrePlaylist; //muestra el nombre de la playlist en el <li>
+        li.style.cursor = 'pointer'; // cambia el cursor a manito
+
+        
+        li.addEventListener('click', () => {
+            mostrarDetallePlaylist(playlist);
+        });
+
+
+        listaPlaylists.appendChild(li); // agrega el <li> a la lista de playlists en el HTML
     });
+}
+
+
+
+
+function mostrarDetallePlaylist(playlist) {
+    detallePlaylist.innerHTML = ''; // limpia el detalle anterior
+
+    if (playlist.canciones.length === 0) {
+        detallePlaylist.textContent = 'Playlist vacía';
+        return;
+    }
+
+    const titulo = document.createElement('h3');
+    titulo.textContent = playlist.nombrePlaylist;
+    detallePlaylist.appendChild(titulo);
+
+    const ul = document.createElement('ul');
+
+    playlist.canciones.forEach(cancion => {
+        const li = document.createElement('li');
+        const fecha = new Date(cancion.fecha).toLocaleDateString();
+
+        li.innerHTML = `
+            <img src="${cancion.caratula}" alt="Carátula de ${cancion.titulo}" width="50">
+            <strong>${cancion.titulo}</strong> - ${cancion.artista} (${formatearDuracion(cancion.duracion)})
+            <br>
+            <small>Agregada el ${fecha}</small>
+        `;
+
+        ul.appendChild(li);
+    });
+
+    detallePlaylist.appendChild(ul);
 }
