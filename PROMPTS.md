@@ -287,3 +287,63 @@ Mismo modo de trabajo que en HU-01 y HU-02: preguntas estratégicas antes de có
 Mismas restricciones que HU-01 y HU-02, aplicadas ahora solo a HU-03.
 
 **Resultado:** Se agregó `agregarCancionAPlaylist()` en `state.js` (con validación de duplicados usando `.some()`, y actualización inmutable con `.map()`), y en `ui.js` se modificó `mostrarResultados()` para incluir un `<select>` de playlists y botón "Agregar" por cada canción encontrada, con manejo de los 3 casos: sin playlist elegida, canción duplicada, y agregado exitoso.
+
+
+## [2026-07-27] — Desarrollo de la cuarta historia de usuario
+
+**Para qué:** Continuar el desarrollo progresivo, ahora con la HU-04.
+
+**Prompt:**
+
+[HISTORIA DE USUARIO]
+
+### HU-04: Ver el contenido de una playlist
+**Como** usuario de Mi Setlist,
+**quiero** ver el detalle de las canciones dentro de una playlist,
+**para** revisar qué contiene y cuándo agregué cada canción.
+
+**Criterios de aceptación:**
+- Al seleccionar una playlist, se muestra la lista completa de sus canciones con carátula, nombre, artista y duración.
+- Cada canción muestra la fecha en que fue agregada a esa playlist.
+- Si la playlist no contiene canciones, se muestra el mensaje "Playlist vacía" en lugar de una lista en blanco.
+
+[MODO DE TRABAJO]
+
+Mismo modo de trabajo que en HU-01, HU-02 y HU-03: preguntas estratégicas antes de código, luego código en porciones pequeñas con explicación y archivo de destino.
+
+[RESTRICCIONES]
+
+Mismas restricciones que las historias anteriores, aplicadas ahora solo a HU-04.
+
+**Resultado:** Se agregó un contenedor `#detalleplaylist` en `index.html`, y en `ui.js` se modificó `renderizarPlaylists()` para hacer cada `<li>` de playlist clickeable (con `addEventListener` y `cursor: pointer`), y se creó `mostrarDetallePlaylist()` que muestra el nombre de la playlist, sus canciones (carátula, título, artista, duración) con la fecha de agregado formateada con `.toLocaleDateString()`, o el mensaje "Playlist vacía" si no tiene canciones.
+
+
+
+## [2026-07-27] — Desarrollo de la quinta historia de usuario
+
+**Para qué:** Continuar el desarrollo progresivo, ahora con la HU-05 (última del Sprint 1).
+
+**Prompt:**
+
+[HISTORIA DE USUARIO]
+
+### HU-05: Persistencia y restauración de datos
+**Como** usuario de Mi Setlist,
+**quiero** que mis playlists se guarden automáticamente y continúen disponibles al volver a abrir la aplicación,
+**para** no perder mi trabajo al cerrar o recargar la página.
+
+**Criterios de aceptación:**
+- Al recargar la página, todas las playlists creadas y sus canciones continúan visibles tal como se dejaron.
+- Si los datos guardados están corruptos o no se pueden leer, la aplicación continúa mostrando una interfaz funcional.
+- Cuando se detectan datos corruptos, se ofrece al usuario la opción "Empezar de cero".
+- Al seleccionar "Empezar de cero", se eliminan los datos dañados y la aplicación queda en un estado inicial limpio y funcional.
+
+[MODO DE TRABAJO]
+
+Mismo modo de trabajo que en HU-01 a HU-04: preguntas estratégicas antes de código, luego código en porciones pequeñas con explicación y archivo de destino.
+
+[RESTRICCIONES]
+
+Mismas restricciones que las historias anteriores, aplicadas ahora solo a HU-05.
+
+**Resultado:** Se agregó `guardarEnLocalStorage()` en `state.js` (con `JSON.stringify`)

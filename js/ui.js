@@ -1,6 +1,9 @@
 
 import {buscarcancion} from './api.js';
-import { crearPlaylist, obtenerPlaylists, agregarCancionAPlaylist } from './state.js';
+import { crearPlaylist, obtenerPlaylists, agregarCancionAPlaylist, cargarDeLocalStorage } from './state.js';
+
+
+
 //referencias html 
 const inputBusqueda = document.querySelector('#inputbusqueda');  //queryselector:busca un element html y lo devuelve pa modificar
 const btnBuscar = document.querySelector('#btnbuscar');
@@ -49,6 +52,8 @@ async function manejarBusqueda(){
 }
 
 }
+
+//para cuando el usuario busque una cancion
 
 //option value(no se muestrqa, pero necesitamos para saber cuala eligio el usuario por el id unico) 
 //canciones :guarda lo q conincido con lo que el usuario buscó
@@ -169,7 +174,7 @@ function renderizarPlaylists() {
 }
 
 
-
+const detallePlaylist = document.querySelector('#detalleplaylist'); // referencia al contenedor de detalle de playlist
 
 function mostrarDetallePlaylist(playlist) {
     detallePlaylist.innerHTML = ''; // limpia el detalle anterior
@@ -181,14 +186,13 @@ function mostrarDetallePlaylist(playlist) {
 
     const titulo = document.createElement('h3');
     titulo.textContent = playlist.nombrePlaylist;
-    detallePlaylist.appendChild(titulo);
-
-    const ul = document.createElement('ul');
-
+    detallePlaylist.appendChild(titulo); // agrega "h3" al contenedor de detalleplaylist
+//para cuando el usuario dee click en mostrar detalle
+    const ul = document.createElement('ul'); 
     playlist.canciones.forEach(cancion => {
         const li = document.createElement('li');
         const fecha = new Date(cancion.fecha).toLocaleDateString();
-
+//br:crea un salto de línea, small:letra más pequeña, tolocaledatestring:convierte un objeto Date a un texto de fecha legibl
         li.innerHTML = `
             <img src="${cancion.caratula}" alt="Carátula de ${cancion.titulo}" width="50">
             <strong>${cancion.titulo}</strong> - ${cancion.artista} (${formatearDuracion(cancion.duracion)})
@@ -196,8 +200,40 @@ function mostrarDetallePlaylist(playlist) {
             <small>Agregada el ${fecha}</small>
         `;
 
-        ul.appendChild(li);
+        ul.appendChild(li);  //LI SE SUBIO A UL
     });
 
-    detallePlaylist.appendChild(ul);
+    detallePlaylist.appendChild(ul); //UL SE SUBIO A DETALLEPLAYLIST
 }
+
+
+
+
+function iniciarApp() {
+    const resultadoCarga = cargarDeLocalStorage();
+
+    if (resultadoCarga && resultadoCarga.corrupto) {
+        mostrarErrorDatosCorruptos();
+    } else {
+        renderizarPlaylists();
+    }
+}
+
+function mostrarErrorDatosCorruptos() {
+    listaPlaylists.innerHTML = ''; //
+    const mensaje = document.createElement('p');
+    mensaje.textContent = 'No pudimos leer tus datos guardados.';
+
+    const btnEmpezarDeCero = document.createElement('button');
+    btnEmpezarDeCero.textContent = 'Empezar de cero';
+
+    btnEmpezarDeCero.addEventListener('click', () => {
+        localStorage.removeItem('playlistsguardados'); //borra todo, para que la próxima vez que se intente cargar, no vuelva a fallar con ese mismo dato corrupto.
+        renderizarPlaylists();
+    });
+
+    listaPlaylists.appendChild(mensaje);
+    listaPlaylists.appendChild(btnEmpezarDeCero);
+}
+
+iniciarApp();

@@ -6,6 +6,9 @@ export function obtenerPlaylists() {
     return playlists;
 }
 
+//nuevaplaylist objeto xq agrupa varios datos bajo un nombre
+//DEFINE PROPIEDADES DE UNA PLAYLIST
+
 export function crearPlaylist(nombre) {
     const nuevaPlaylist = {
         id: crypto.randomUUID(),
@@ -49,3 +52,53 @@ const cancionyaExiste = playlist.canciones.some(c => c.titulo === cancion.titulo
 
     return { exito: true, mensaje: 'Canción agregada' }; //solo si no entra al if
 }
+
+
+
+//para q las playlists no se pierdan al recargar la página
+function guardarEnLocalStorage() {
+    try {
+        //setItem(clave, valor)
+        // stringify: convierte obj array a string para poder guardarlo en localStorage  
+        //localStorage: para guardar datos del navegador
+        localStorage.setItem('playlistsguardados', JSON.stringify(playlists)); // el "playlists" de stringify sí es el nombre del array 
+    } catch (error) {
+        console.log('No se pudo guardar en localStorage');
+    }
+}
+
+
+
+
+export function cargarDeLocalStorage() {
+    //getitem(clave): devuelve el valor guardado en localStorage con la clave "playlistsguardados"
+    const datosGuardados = localStorage.getItem('playlistsguardados');
+
+    if (datosGuardados === null) {
+        return; // no hay nada guardado todavía (primera vez que se abre la app), no hay nada que cargar
+    }
+
+    try {
+        //parse: convierte string a obj array para poder usarlo en el código
+        const datosParseados = JSON.parse(datosGuardados);
+
+        // Rehidratar fechas: convertir el texto de vuelta a objetos Date
+        playlists = datosParseados.map(playlist => ({
+            ...playlist,
+            canciones: playlist.canciones.map(cancion => ({
+                ...cancion,
+                fecha: new Date(cancion.fecha)
+            }))
+        }));
+
+    } catch (error) {
+        playlists = []; // datos corruptos, empieza vacío
+        return { corrupto: true };
+    }
+
+    return { corrupto: false };
+}
+
+
+
+
