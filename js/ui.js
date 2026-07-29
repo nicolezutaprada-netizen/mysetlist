@@ -18,15 +18,34 @@ const mensajePlaylist = document.querySelector('#mensajeplaylist');
 const listaPlaylists = document.querySelector('#listaplaylists');
 
 
+
+
+inputBusqueda.addEventListener('input', () => {
+    mensajeBusqueda.textContent = '';
+    mensajePlaylist.textContent = '';
+});
+
+inputNombrePlaylist.addEventListener('input', () => {
+    mensajePlaylist.textContent = '';
+});
+
 btnBuscar.addEventListener('click', manejarBusqueda); // cuando click, ejecutar manejarBusqueda
+
+// ...existing code...
 
 
 //innerHTML reemplaza o borra el contenido interno de un elemento.
 //appendChild() agrega un elemento nuevo al final, sin borrar lo anterior.
 
+
+
+
+
 async function manejarBusqueda(){ 
     const termino=inputBusqueda.value.trim()  //value guarda lo q escribio el usuario en el input, trim:sin espacios inicio y final
 
+    mensajeBusqueda.textContent = '';
+    mensajePlaylist.textContent = '';
     if (termino===''){
         mensajeBusqueda.textContent='Escribe algo para buscar';
         listaResultados.innerHTML = ''; // limpiamos resultados anteriores
@@ -53,6 +72,10 @@ async function manejarBusqueda(){
 }
 
 }
+
+
+
+
 
 //para cuando el usuario busque una cancion
 
@@ -133,6 +156,18 @@ function formatearDuracion(ms) {
 
 
 
+function formatearDuracionTotal(ms) { //mlseg entre mil, math.floor:quita decimales
+    const totalMinutos = Math.floor(ms / 60000);
+    const horas = Math.floor(totalMinutos / 60);
+    const minutos = totalMinutos % 60;//// % te da el resto de la division
+
+    if (horas === 0) {
+        return `${minutos} min`; //si no hay horas, solo muestra minutos
+    }
+
+    return `${horas} h ${minutos} min`;
+}
+
 
 
 
@@ -173,45 +208,23 @@ function renderizarPlaylists() {
 
         const btnEliminar = document.createElement('button');
         btnEliminar.textContent = 'Eliminar';
-        btnEliminar.addEventListener('click', () => {
-            mostrarModalConfirmacion('¿Eliminar esta playlist?', () => {
-                eliminarPlaylist(playlist.id);
-                detallePlaylist.textContent = 'Selecciona una playlist para ver su contenido';//Reemplaza la playlist eliminada x esto
-                renderizarPlaylists();
-            });
-        });
+       btnEliminar.addEventListener('click', () => {
+       mostrarModalConfirmacion('¿Eliminar esta playlist?', () => {
+       eliminarPlaylist(playlist.id);
 
+        if (obtenerPlaylists().length === 0) {
+            detallePlaylist.textContent = 'Selecciona una playlist para ver su contenido';
+        }
+
+        renderizarPlaylists();
+    });
+});
+          
         li.appendChild(nombreSpan); //se sube al li el nombre de la playlist para q se vea en la pagina
         li.appendChild(btnEliminar); //se sube al li el boton eliminar para q se vea en la pagina
         listaPlaylists.appendChild(li);
     });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -228,6 +241,16 @@ function mostrarDetallePlaylist(playlist) {
     const titulo = document.createElement('h3');
     titulo.textContent = playlist.nombrePlaylist;
     detallePlaylist.appendChild(titulo); // agrega "h3" al contenedor de detalleplaylist
+
+    // suma la duración de todas las canciones
+    //reduce:se usa porque queremos un solo valor (la suma) a partir de un array (las canciones)
+    //reduce: (acumulador, lo que se va a acumular)
+    //suma:acumulador q guarda la suma de duraciones, cancion:cada cancion del array
+    //0: valor inicial del acumulador (suma) para q empiece desde 0
+    const duracionTotalMs = playlist.canciones.reduce((suma, cancion) => suma + cancion.duracion, 0); //duracion:del constructor en cancion.js
+    const parrafoDuracion = document.createElement('p');
+    parrafoDuracion.textContent = `Duración total: ${formatearDuracionTotal(duracionTotalMs)}`;
+    detallePlaylist.appendChild(parrafoDuracion);
 
 
 //para cuando el usuario dee click en mostrar detalle
@@ -248,11 +271,15 @@ function mostrarDetallePlaylist(playlist) {
 
         const btnQuitar = li.querySelector('.btn-quitar-cancion');
 
-        btnQuitar.addEventListener('click', () => {
-            mostrarModalConfirmacion('¿Quitar esta canción de la playlist?', () => {
+
+                btnQuitar.addEventListener('click', () => {
+                mostrarModalConfirmacion('¿Quitar esta canción de la playlist?', () => {
                 quitarCancionDePlaylist(playlist.id, cancion.id);
-                mostrarDetallePlaylist(playlist); // vuelve a pintar el detalle, ya sin esa canción
-             });
+               const playlistActualizada = obtenerPlaylists().find(p => p.id === playlist.id); //se compara id 
+              mostrarDetallePlaylist(playlistActualizada); // usa la versión FRESCA, no la vieja
+
+
+           });
         });
 
         ul.appendChild(li);  //LI SE SUBIO A UL
@@ -261,9 +288,6 @@ function mostrarDetallePlaylist(playlist) {
 
     detallePlaylist.appendChild(ul); //UL SE SUBIO A DETALLEPLAYLIST
 }
-
-
-
 
 
 

@@ -1,4 +1,4 @@
-
+import { guardarEnLocalStorage, cargarDeLocalStorage as cargarDatosGuardados } from './storage.js';
 
 let playlists = []; // arranca vacío, luego se llenará con lo guardado en localStorage
 
@@ -18,7 +18,7 @@ export function crearPlaylist(nombre) {
 //...play devyuelve las antiguas y , las nuevas
     playlists = [...playlists, nuevaPlaylist]; // CRUD inmutable: array nuevo, no mutamos el original
 
-    guardarEnLocalStorage();
+    guardarEnLocalStorage(playlists);
 
     return nuevaPlaylist;
 }
@@ -54,54 +54,27 @@ const cancionyaExiste = playlist.canciones.some(c => c.titulo === cancion.titulo
 
 
 
-    guardarEnLocalStorage(); 
+    guardarEnLocalStorage(playlists); 
 
     return { exito: true, mensaje: 'Canción agregada' }; //solo si no entra al if
 }
 
 
 
-//para q las playlists no se pierdan al recargar la página
-function guardarEnLocalStorage() {
-    try {
-        //setItem(clave, valor)
-        // stringify: convierte obj array a string para poder guardarlo en localStorage  
-        //localStorage: para guardar datos del navegador
-        localStorage.setItem('playlistsguardados', JSON.stringify(playlists)); // el "playlists" de stringify sí es el nombre del array 
-    } catch (error) {
-        console.log('No se pudo guardar en localStorage');
-    }
-}
-
-
-
 
 export function cargarDeLocalStorage() {
-    //getitem(clave): devuelve el valor guardado en localStorage con la clave "playlistsguardados"
-    const datosGuardados = localStorage.getItem('playlistsguardados');
+    const resultado = cargarDatosGuardados();
 
-    if (datosGuardados === null) {
+    if (!resultado) {
         return; // no hay nada guardado todavía (primera vez que se abre la app), no hay nada que cargar
     }
 
-    try {
-        //parse: convierte string a obj array para poder usarlo en el código
-        const datosParseados = JSON.parse(datosGuardados);
-
-        // Rehidratar fechas: convertir el texto de vuelta a objetos Date
-        playlists = datosParseados.map(playlist => ({
-            ...playlist,
-            canciones: playlist.canciones.map(cancion => ({
-                ...cancion,
-                fecha: new Date(cancion.fecha) // Convertir el texto de vuelta a objeto Date xq parse no puede
-            }))
-        }));
-
-    } catch (error) {
+    if (resultado.corrupto) {
         playlists = []; // datos corruptos, empieza vacío
         return { corrupto: true };
     }
 
+    playlists = resultado.playlists;
     return { corrupto: false };
 }
 
@@ -119,12 +92,12 @@ export function quitarCancionDePlaylist(playlistId, cancionId) {
         return p; //se ejecuta cuando el p.id no coincide con el playlistId que se quiere quitar la canción, devuelve la playlist sin modificarla
     });
 
-    guardarEnLocalStorage();
+    guardarEnLocalStorage(playlists);
 }
 
 
 
 export function eliminarPlaylist(playlistId) {
     playlists = playlists.filter(p => p.id !== playlistId); //filter devuelve un array de playlists con id no coincida con el playlistId que se quiere eliminar
-    guardarEnLocalStorage();
+    guardarEnLocalStorage(playlists);
 }

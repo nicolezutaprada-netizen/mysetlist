@@ -411,3 +411,34 @@ Mismo modo de trabajo que en historias anteriores: preguntas estratégicas antes
 Mismas restricciones que las historias anteriores, aplicadas ahora solo a HU-07.
 
 **Resultado:** Se agregó `eliminarPlaylist()` en `state.js` (usando `.filter()` para eliminar sin mutar el array). Se modificó `renderizarPlaylists()` en `ui.js` para separar el nombre de la playlist (clickeable, en un `<span>`) del nuevo botón "Eliminar", reutilizando el modal de confirmación genérico ya construido en HU-06. Al confirmar, se limpia el contenedor de detalle con un mensaje de "Selecciona una playlist" antes de volver a renderizar.
+
+
+
+## [2026-07-29] — Desarrollo de la octava historia de usuario
+
+**Para qué:** Continuar el Sprint 2, ahora con la HU-08.
+
+**Prompt:**
+
+[HISTORIA DE USUARIO]
+
+### HU-08: Ver la duración total de una playlist
+**Como** usuario de Mi Setlist,
+**quiero** ver cuánto dura una playlist en total,
+**para** saber si me alcanza para un trayecto, ensayo o actividad específica.
+
+**Criterios de aceptación:**
+- Al abrir el detalle de una playlist, se muestra su duración total.
+- La duración se presenta en un formato legible, por ejemplo, "1 h 23 min", y no en segundos o milisegundos.
+- Si la playlist está vacía, se muestra "0 min" o un estado equivalente sin errores en pantalla.
+- La duración total se actualiza automáticamente al agregar o quitar canciones.
+
+[MODO DE TRABAJO]
+
+Mismo modo de trabajo que en historias anteriores: preguntas estratégicas antes de código, luego código en porciones pequeñas con explicación y archivo de destino.
+
+[RESTRICCIONES]
+
+Mismas restricciones que las historias anteriores, aplicadas ahora solo a HU-08.
+
+**Resultado:** En `mostrarDetallePlaylist()` (ui.js) se agregó el cálculo de duración total con `.reduce()` (sumando `cancion.duracion` de todas las canciones), y una nueva función `formatearDuracionTotal()` que convierte milisegundos a formato "X h Y min" o "X min". Se actualiza automáticamente porque el detalle completo se vuelve a renderizar cada vez que cambia el estado.
