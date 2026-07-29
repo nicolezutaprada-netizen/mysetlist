@@ -18,6 +18,8 @@ export function crearPlaylist(nombre) {
 //...play devyuelve las antiguas y , las nuevas
     playlists = [...playlists, nuevaPlaylist]; // CRUD inmutable: array nuevo, no mutamos el original
 
+    guardarEnLocalStorage();
+
     return nuevaPlaylist;
 }
 
@@ -49,6 +51,10 @@ const cancionyaExiste = playlist.canciones.some(c => c.titulo === cancion.titulo
         }
         return p; //se devuelve  la playlist que se revisa sin modificarlo si no es la playlist a la que se quiere agregar la canción
     });
+
+
+
+    guardarEnLocalStorage(); 
 
     return { exito: true, mensaje: 'Canción agregada' }; //solo si no entra al if
 }
@@ -99,6 +105,22 @@ export function cargarDeLocalStorage() {
     return { corrupto: false };
 }
 
+
+
+
+
+export function quitarCancionDePlaylist(playlistId, cancionId) {
+    playlists = playlists.map(p => {
+        if (p.id === playlistId) { //si la playlist q se esta revisando es la misma a la que se quiere quitar la canción
+            //...p:devuelve la palylist q se esta revisando
+            //p.canciones.filter:devuelve un array nuevo con las canciones q cumplen la condición (c.id !== cancionId) y se queda con las canciones cuyo id no coincida
+            return { ...p, canciones: p.canciones.filter(c => c.id !== cancionId) }; //solo se queda con las canciones cuyo id no coincida con el de la canción que queremos quitar
+        }
+        return p; //se ejecuta cuando el p.id no coincide con el playlistId que se quiere quitar la canción, devuelve la playlist sin modificarla
+    });
+
+    guardarEnLocalStorage();
+}
 
 
 

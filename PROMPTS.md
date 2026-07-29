@@ -347,3 +347,35 @@ Mismo modo de trabajo que en HU-01 a HU-04: preguntas estratégicas antes de có
 Mismas restricciones que las historias anteriores, aplicadas ahora solo a HU-05.
 
 **Resultado:** Se agregó `guardarEnLocalStorage()` en `state.js` (con `JSON.stringify`)
+
+
+
+
+## [2026-07-28] — Desarrollo de la sexta historia de usuario
+
+**Para qué:** Comenzar el Sprint 2, ahora con la HU-06.
+
+**Prompt:**
+
+[HISTORIA DE USUARIO]
+
+### HU-06: Quitar una canción de una playlist
+**Como** usuario de Mi Setlist,
+**quiero** quitar una canción de una playlist con confirmación previa,
+**para** corregir errores sin eliminar contenido accidentalmente.
+
+**Criterios de aceptación:**
+- En el detalle de la playlist existe una acción visible para quitar cada canción.
+- Al seleccionar la acción de quitar, se muestra un modal propio de confirmación y no el `confirm()` nativo del navegador.
+- Si el usuario cancela la operación, la canción permanece en la playlist sin cambios.
+- Si el usuario confirma la operación, la canción desaparece inmediatamente de la playlist.
+
+[MODO DE TRABAJO]
+
+Mismo modo de trabajo que en historias anteriores: preguntas estratégicas antes de código, luego código en porciones pequeñas con explicación y archivo de destino.
+
+[RESTRICCIONES]
+
+Mismas restricciones que las historias anteriores, aplicadas ahora solo a HU-06.
+
+**Resultado:** Se agregó `quitarCancionDePlaylist()` en `state.js` (usando `.filter()` para eliminar sin mutar el array). Se creó

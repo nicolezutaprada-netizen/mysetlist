@@ -1,6 +1,7 @@
 
 import {buscarcancion} from './api.js';
-import { crearPlaylist, obtenerPlaylists, agregarCancionAPlaylist, cargarDeLocalStorage } from './state.js';
+
+import { crearPlaylist, obtenerPlaylists, agregarCancionAPlaylist, cargarDeLocalStorage, quitarCancionDePlaylist } from './state.js';
 
 
 
@@ -187,7 +188,10 @@ function mostrarDetallePlaylist(playlist) {
     const titulo = document.createElement('h3');
     titulo.textContent = playlist.nombrePlaylist;
     detallePlaylist.appendChild(titulo); // agrega "h3" al contenedor de detalleplaylist
+
+
 //para cuando el usuario dee click en mostrar detalle
+
     const ul = document.createElement('ul'); 
     playlist.canciones.forEach(cancion => {
         const li = document.createElement('li');
@@ -198,13 +202,37 @@ function mostrarDetallePlaylist(playlist) {
             <strong>${cancion.titulo}</strong> - ${cancion.artista} (${formatearDuracion(cancion.duracion)})
             <br>
             <small>Agregada el ${fecha}</small>
+             <button class="btn-quitar-cancion">Quitar</button>
         `;
 
+
+        const btnQuitar = li.querySelector('.btn-quitar-cancion');
+
+        btnQuitar.addEventListener('click', () => {
+            mostrarModalConfirmacion('¿Quitar esta canción de la playlist?', () => {
+                quitarCancionDePlaylist(playlist.id, cancion.id);
+                mostrarDetallePlaylist(playlist); // vuelve a pintar el detalle, ya sin esa canción
+             });
+        });
+
         ul.appendChild(li);  //LI SE SUBIO A UL
+
     });
 
     detallePlaylist.appendChild(ul); //UL SE SUBIO A DETALLEPLAYLIST
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -237,3 +265,29 @@ function mostrarErrorDatosCorruptos() {
 }
 
 iniciarApp();
+
+
+
+//referencias html
+const modalConfirmacion = document.querySelector('#modal-confirmacion');
+const mensajeModal = document.querySelector('#mensaje-modal');
+const btnConfirmarModal = document.querySelector('#btn-confirmar-modal');
+const btnCancelarModal = document.querySelector('#btn-cancelar-modal');
+
+
+//'block' = visible; 'none' = oculto.
+
+
+function mostrarModalConfirmacion(mensaje, accionAlConfirmar) {
+    mensajeModal.textContent = mensaje; // modal por medio del parametro "mensaje"
+    modalConfirmacion.style.display = 'block'; // muestra el modal
+
+    btnConfirmarModal.onclick = () => { //se usa onclick en vez de addEventListener porque queremos que se ejecute solo una vez, y si usamos addEventListener, cada vez que se abra el modal, se agregaría otro listener y se ejecutaría varias veces.
+        accionAlConfirmar(); // ejecuta la acción que le pasaron (quitar canción, eliminar playlist, etc.)
+        modalConfirmacion.style.display = 'none'; // oculta el modal
+    };
+
+    btnCancelarModal.onclick = () => {
+        modalConfirmacion.style.display = 'none'; // solo oculta, sin hacer nada más
+    };
+}
