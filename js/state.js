@@ -93,7 +93,7 @@ export function cargarDeLocalStorage() {
             ...playlist,
             canciones: playlist.canciones.map(cancion => ({
                 ...cancion,
-                fecha: new Date(cancion.fecha)
+                fecha: new Date(cancion.fecha) // Convertir el texto de vuelta a objeto Date xq parse no puede
             }))
         }));
 
@@ -124,3 +124,7 @@ export function quitarCancionDePlaylist(playlistId, cancionId) {
 
 
 
+export function eliminarPlaylist(playlistId) {
+    playlists = playlists.filter(p => p.id !== playlistId); //filter devuelve un array de playlists con id no coincida con el playlistId que se quiere eliminar
+    guardarEnLocalStorage();
+}

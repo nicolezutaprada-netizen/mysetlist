@@ -1,7 +1,7 @@
 
 import {buscarcancion} from './api.js';
 
-import { crearPlaylist, obtenerPlaylists, agregarCancionAPlaylist, cargarDeLocalStorage, quitarCancionDePlaylist } from './state.js';
+import { crearPlaylist, obtenerPlaylists, agregarCancionAPlaylist, cargarDeLocalStorage, quitarCancionDePlaylist, eliminarPlaylist } from './state.js';
 
 
 
@@ -154,25 +154,65 @@ function manejarCrearPlaylist() {
 
 
 
+//IMPORTANTE:
+
 function renderizarPlaylists() {
     listaPlaylists.innerHTML = ''; // limpia la lista antes de repintar
 
-    const playlists = obtenerPlaylists(); 
+    const playlists = obtenerPlaylists();
 
     playlists.forEach(playlist => { //recorre cada playlist y crea un <li> para cada una
         const li = document.createElement('li'); // crea un <li> nuevo por cada playlist
-        li.textContent = playlist.nombrePlaylist; //muestra el nombre de la playlist en el <li>
         li.style.cursor = 'pointer'; // cambia el cursor a manito
 
-        
-        li.addEventListener('click', () => {
+        const nombreSpan = document.createElement('span'); //span para el nombre de la playlist, para poder agregarle un evento de click sin interferir con el botón de eliminar
+        nombreSpan.textContent = playlist.nombrePlaylist; //muestra el nombre de la playlist en el <li>
+        nombreSpan.addEventListener('click', () => {
             mostrarDetallePlaylist(playlist);
         });
 
+        const btnEliminar = document.createElement('button');
+        btnEliminar.textContent = 'Eliminar';
+        btnEliminar.addEventListener('click', () => {
+            mostrarModalConfirmacion('¿Eliminar esta playlist?', () => {
+                eliminarPlaylist(playlist.id);
+                detallePlaylist.textContent = 'Selecciona una playlist para ver su contenido';//Reemplaza la playlist eliminada x esto
+                renderizarPlaylists();
+            });
+        });
 
-        listaPlaylists.appendChild(li); // agrega el <li> a la lista de playlists en el HTML
+        li.appendChild(nombreSpan); //se sube al li el nombre de la playlist para q se vea en la pagina
+        li.appendChild(btnEliminar); //se sube al li el boton eliminar para q se vea en la pagina
+        listaPlaylists.appendChild(li);
     });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 const detallePlaylist = document.querySelector('#detalleplaylist'); // referencia al contenedor de detalle de playlist
@@ -228,16 +268,9 @@ function mostrarDetallePlaylist(playlist) {
 
 
 
-
-
-
-
-
-
-
-
-
 function iniciarApp() {
+
+
     const resultadoCarga = cargarDeLocalStorage();
 
     if (resultadoCarga && resultadoCarga.corrupto) {

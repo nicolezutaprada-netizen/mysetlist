@@ -379,3 +379,35 @@ Mismo modo de trabajo que en historias anteriores: preguntas estratégicas antes
 Mismas restricciones que las historias anteriores, aplicadas ahora solo a HU-06.
 
 **Resultado:** Se agregó `quitarCancionDePlaylist()` en `state.js` (usando `.filter()` para eliminar sin mutar el array). Se creó
+
+
+
+
+## [2026-07-28] — Desarrollo de la séptima historia de usuario
+
+**Para qué:** Continuar el Sprint 2, ahora con la HU-07.
+
+**Prompt:**
+
+[HISTORIA DE USUARIO]
+
+### HU-07: Eliminar una playlist
+**Como** usuario de Mi Setlist,
+**quiero** eliminar una playlist completa con confirmación previa,
+**para** deshacerme de una colección que ya no necesito sin borrarla por accidente.
+
+**Criterios de aceptación:**
+- En la lista o el detalle de cada playlist existe una acción visible para eliminarla.
+- Al seleccionar la acción de eliminar, se muestra un modal propio de confirmación y no el `confirm()` nativo del navegador.
+- Si el usuario cancela la operación, la playlist y sus canciones permanecen sin cambios.
+- Si el usuario confirma la operación, la playlist desaparece inmediatamente de la lista de playlists.
+
+[MODO DE TRABAJO]
+
+Mismo modo de trabajo que en historias anteriores: preguntas estratégicas antes de código, luego código en porciones pequeñas con explicación y archivo de destino.
+
+[RESTRICCIONES]
+
+Mismas restricciones que las historias anteriores, aplicadas ahora solo a HU-07.
+
+**Resultado:** Se agregó `eliminarPlaylist()` en `state.js` (usando `.filter()` para eliminar sin mutar el array). Se modificó `renderizarPlaylists()` en `ui.js` para separar el nombre de la playlist (clickeable, en un `<span>`) del nuevo botón "Eliminar", reutilizando el modal de confirmación genérico ya construido en HU-06. Al confirmar, se limpia el contenedor de detalle con un mensaje de "Selecciona una playlist" antes de volver a renderizar.
