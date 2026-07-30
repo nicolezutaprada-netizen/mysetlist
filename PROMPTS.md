@@ -473,3 +473,61 @@ Mismo modo de trabajo que en historias anteriores: preguntas estratégicas antes
 Mismas restricciones que las historias anteriores, aplicadas ahora solo a HU-09.
 
 **Resultado:** Se agregó `encontrarMasFrecuentes()` en `ui.js`, que cuenta ocurrencias con un objeto (`conteo[valor]`), encuentra el máximo con `Math.max(...Object.values())`, y devuelve todos los empatados con `.filter()` + `.join(', ')` (decisión: mostrar todos los empatados en vez de elegir uno arbitrariamente). Se usó en `mostrarDetallePlaylist()` para mostrar cantidad de canciones, género(s) más frecuente(s) y artista(s) más frecuente(s).
+
+
+
+
+
+
+[CONTEXTO]
+
+Terminé de programar las 10 historias de usuario de mi proyecto "Mi Setlist" (Sprint 1 y Sprint 2 completos). El stack es HTML5 + CSS3 + JavaScript vanilla con módulos ESM, sin frameworks ni backend, usando localStorage para persistencia y la API de iTunes Search para buscar canciones.
+
+[TAREA]
+
+Quiero verificar que toda mi aplicación funcione correctamente de principio a fin. Dame un plan de pruebas manual, organizado por historia de usuario (HU-01 a HU-10), que cubra:
+
+- El camino feliz (todo funciona como se espera).
+- Los casos borde mencionados en los criterios de aceptación de cada HU (campos vacíos, duplicados, datos corruptos, playlists vacías, etc.).
+- Pruebas de integración entre historias (por ejemplo: crear una playlist, agregar canciones, recargar la página, verificar que persista, luego ordenar y quitar canciones).
+
+[FORMATO]
+
+Preséntalo como una checklist clara, agrupada por HU, para que pueda ir marcando cada prueba mientras la realizo en el navegador con Live Server.
+
+[RESTRICCIÓN]
+
+No me des código nuevo, solo el plan de pruebas — mi código ya está terminado, solo quiero verificarlo.
+
+
+
+
+
+## [2026-07-30] — Desarrollo de la décima historia de usuario
+
+**Para qué:** Cerrar el Sprint 2 y el proyecto completo, con la HU-10.
+
+**Prompt:**
+
+[HISTORIA DE USUARIO]
+
+### HU-10: Ordenar canciones de una playlist
+**Como** usuario de Mi Setlist,
+**quiero** ordenar las canciones por fecha o alfabéticamente,
+**para** encontrar canciones con mayor facilidad según cómo prefiera revisarlas.
+
+**Criterios de aceptación:**
+- Existe una opción visible para ordenar por recientes primero, antiguas primero o alfabéticamente.
+- Al seleccionar un criterio, la lista de canciones se reordena inmediatamente en pantalla.
+- El orden elegido no modifica los datos originales de las canciones, como la fecha de agregado o la duración.
+- Si la playlist tiene una sola canción o está vacía, la opción de ordenar no genera errores visibles.
+
+[MODO DE TRABAJO]
+
+Mismo modo de trabajo que en historias anteriores: preguntas estratégicas antes de código, luego código en porciones pequeñas con explicación y archivo de destino.
+
+[RESTRICCIONES]
+
+Mismas restricciones que las historias anteriores, aplicadas ahora solo a HU-10.
+
+**Resultado:** Se agregó `ordenarCanciones()` en `ui.js`, usando spread (`[...canciones]`) para copiar el array antes de `.sort()` (evitando mutar el original), con comparación de fechas para recientes/antiguas y `.localeCompare()` para orden alfabético. Se agregó un `<select>` de criterio de orden en `mostrarDetallePlaylist()`, con una variable (`criterioOrdenActual`) que recuerda la elección del usuario entre renders.

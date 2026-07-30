@@ -10,7 +10,9 @@
 - HU-07: Eliminar una playlist (depende de que ya existan playlists)
 - HU-08: Ver la duración total de una playlist (cálculo derivado de datos que ya existen desde Sprint 1)
 - HU-09: Ver estadísticas de una playlist (necesita datos reales acumulados para calcular género y artista más frecuente)
-- HU-10: Ordenar canciones de una playlist (solo tiene sentido si ya hay una lista de canciones con fechas y nombres que ordenar)
+- HU-10: Ordenar canciones de una playlist (solo tiene sentido si ya hay una lista de canciones con fechas y nombres que ordenar)(HU PROPIA)
+- HU-11: Buscar canciones por género(HU PROPIA)
+-HU-12: Visualizar canciones más escuchadas(HU PROPIA)
 
 ## Dependencias detectadas
 - Para HU-03 necesito antes HU-01 y HU-02, porque no puedo agregar una canción que no encontré, ni a una playlist que no existe.

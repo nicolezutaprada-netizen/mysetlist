@@ -644,7 +644,7 @@ h3 {
     transition: width 0.5s linear;
 }
 
-@keyframes fadeIn {
+@keyframes fadeIn { 
     from { opacity: 0; }
     to { opacity: 1; }
 }
@@ -666,7 +666,9 @@ h3 {
    RESPONSIVE (movil)
    ============================================== */
 @media (max-width: 700px) {
-    body { overflow: auto; }
+    body { 
+        overflow: auto; 
+    }
 
     .app-layout {
         grid-template-columns: 1fr;
@@ -689,31 +691,94 @@ h3 {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    #listaresultados li,
-    #detalleplaylist ul li {
-        grid-template-columns: 40px 1fr auto;
+    /* resultados de búsqueda */
+    #listaresultados li {
+        display: grid;
+        grid-template-columns: 40px minmax(0, 1fr) auto;
         grid-template-areas:
             "img info duracion"
-            "img acciones acciones";
+            "img select select"
+            "img boton boton";
         gap: 0.6rem;
         padding: 0.6rem;
+        align-items: center;
     }
 
-    #listaresultados li img,
+    #listaresultados li img {
+        width: 40px;
+        height: 40px;
+        grid-area: img;
+        object-fit: cover;
+    }
+
+    #listaresultados .cancion-info {
+        grid-area: info;
+        min-width: 0;
+    }
+
+    #listaresultados .cancion-duracion {
+        grid-area: duracion;
+    }
+
+    #listaresultados .cancion-titulo,
+    #listaresultados .cancion-artista {
+        display: block;
+        overflow-wrap: anywhere;
+    }
+
+    #listaresultados .selectplaylist {
+        grid-area: select;
+        width: 100%;
+        max-width: 100%;
+        opacity: 1 !important;
+    }
+
+    #listaresultados .btnagregar {
+        grid-area: boton;
+        width: 100%;
+        max-width: 100%;
+        opacity: 1 !important;
+    }
+
+    /* canciones dentro del detalle de una playlist */
+    #detalleplaylist ul li {
+        display: grid;
+        grid-template-columns: 40px minmax(0, 1fr) auto;
+        grid-template-areas:
+            "img info duracion"
+            "img quitar quitar";
+        gap: 0.6rem;
+        padding: 0.6rem;
+        align-items: center;
+    }
+
     #detalleplaylist ul li img {
         width: 40px;
         height: 40px;
         grid-area: img;
+        object-fit: cover;
     }
 
-    .cancion-info { grid-area: info; }
-    .cancion-duracion { grid-area: duracion; }
+    #detalleplaylist .cancion-info {
+        grid-area: info;
+        min-width: 0;
+    }
 
-    .selectplaylist,
-    .btnagregar,
-    .btn-quitar-cancion {
-        grid-area: acciones;
-        opacity: 1 !important;
+    #detalleplaylist .cancion-duracion {
+        grid-area: duracion;
+    }
+
+    #detalleplaylist .cancion-titulo,
+    #detalleplaylist .cancion-artista,
+    #detalleplaylist .cancion-fecha {
+        display: block;
+        overflow-wrap: anywhere;
+    }
+
+    #detalleplaylist .btn-quitar-cancion {
+        grid-area: quitar;
+        width: 100%;
         max-width: 100%;
+        opacity: 1 !important;
     }
 }
