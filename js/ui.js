@@ -301,6 +301,7 @@ function renderizarPlaylists() {
         nombreSpan.textContent = playlist.nombrePlaylist; //muestra el nombre de la playlist en el <li>
         nombreSpan.addEventListener('click', () => {
             mostrarDetallePlaylist(playlist);
+                detallePlaylist.scrollIntoView({ behavior: 'smooth' });              
         });
 
         const btnEliminar = document.createElement('button');
@@ -373,6 +374,8 @@ function mostrarDetallePlaylist(playlist) {
     selectOrden.addEventListener('change', () => {  //se dispara cuando el usuario elige una opción distinta en el <select>
         criterioOrdenActual = selectOrden.value;
         mostrarDetallePlaylist(playlist);
+        
+        
     });
 
     detallePlaylist.appendChild(selectOrden);
@@ -418,17 +421,9 @@ function mostrarDetallePlaylist(playlist) {
     });
   
     detallePlaylist.appendChild(ul); //UL SE SUBIO A DETALLEPLAYLIST
-   detallePlaylist.appendChild(ul); //UL SE SUBIO A DETALLEPLAYLIST
 
-    // scroll suave hasta el detalle, dentro del contenedor principal que tiene el scroll propio
-    setTimeout(() => {
-        const contenedor = document.querySelector('.contenido-principal');
-        contenedor.scrollTo({
-            top: detallePlaylist.offsetTop,
-            behavior: 'smooth'
-        });
-    }, 100);
 }
+    
 
 
 function iniciarApp() {
