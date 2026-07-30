@@ -3,7 +3,7 @@ import {buscarcancion} from './api.js';
 
 import { crearPlaylist, obtenerPlaylists, agregarCancionAPlaylist, cargarDeLocalStorage, quitarCancionDePlaylist, eliminarPlaylist } from './state.js';
 
-
+let criterioOrdenActual = 'default';  // guarda el criterio de orden elegido; 'default' = orden original, sin ordenar todavía 
 
 //referencias html 
 const inputBusqueda = document.querySelector('#inputbusqueda');  //queryselector:busca un element html y lo devuelve pa modificar
@@ -134,6 +134,12 @@ selectPlaylist.addEventListener('focus', () => {
 
             if (resultado.exito) { //solo se ejecuta si fue exitoso, es decir, si no estaba duplicado
                 renderizarPlaylists();
+
+                //si la playlist a la que se agregó la canción es la misma que está abierta en el detalle, se refresca también
+                const playlistActualizada = obtenerPlaylists().find(p => p.id === playlistId);
+                if (playlistActualizada) {
+                    mostrarDetallePlaylist(playlistActualizada);
+                }
             }
         });
 
@@ -141,7 +147,6 @@ selectPlaylist.addEventListener('focus', () => {
         listaResultados.appendChild(li); // insertar elemento para q se vea en la pagina
     });
 }
-
 
 
 
@@ -166,6 +171,27 @@ function formatearDuracionTotal(ms) { //mlseg entre mil, math.floor:quita decima
     }
 
     return `${horas} h ${minutos} min`;
+}
+
+
+
+function ordenarCanciones(canciones, criterio) {
+    const copia = [...canciones]; // copia para no mutar el array original
+//sort:compara
+
+    if (criterio === 'recientes') {
+        return copia.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+    }
+
+    if (criterio === 'antiguas') {
+        return copia.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+    }
+
+    if (criterio === 'alfabetico') {
+        return copia.sort((a, b) => a.titulo.localeCompare(b.titulo));//localecomapre:comapara alafabeticamente
+    }
+
+    return copia; // // si NINGUNO de los if de arriba se cumple (o sea, criterio === 'default')
 }
 
 
@@ -292,10 +318,33 @@ function mostrarDetallePlaylist(playlist) {
     detallePlaylist.appendChild(parrafoEstadisticas);
 
 
+
+
+    const selectOrden = document.createElement('select');
+    selectOrden.innerHTML = `
+    <option value="default">Orden original</option>
+    <option value="recientes">Más recientes primero</option>
+    <option value="antiguas">Más antiguas primero</option>
+    <option value="alfabetico">Alfabético</option>
+    `;
+    selectOrden.value = criterioOrdenActual; // mantiene el criterio ya elegido, si lo había
+
+    selectOrden.addEventListener('change', () => {  //se dispara cuando el usuario elige una opción distinta en el <select>
+    criterioOrdenActual = selectOrden.value;
+    mostrarDetallePlaylist(playlist);
+});
+
+detallePlaylist.appendChild(selectOrden);
+
+
 //para cuando el usuario dee click en mostrar detalle
 
     const ul = document.createElement('ul'); 
-    playlist.canciones.forEach(cancion => {
+
+    //HU-10: aplica el criterio de orden elegido antes de mostrar las canciones
+    const cancionesOrdenadas = ordenarCanciones(playlist.canciones, criterioOrdenActual);
+
+    cancionesOrdenadas.forEach(cancion => {
         const li = document.createElement('li');
         const fecha = new Date(cancion.fecha).toLocaleDateString();
 //br:crea un salto de línea, small:letra más pequeña, tolocaledatestring:convierte un objeto Date a un texto de fecha legibl
@@ -327,8 +376,6 @@ function mostrarDetallePlaylist(playlist) {
 
     detallePlaylist.appendChild(ul); //UL SE SUBIO A DETALLEPLAYLIST
 }
-
-
 
 
 function iniciarApp() {

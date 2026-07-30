@@ -18,5 +18,6 @@
 - Para HU-08, HU-09 y HU-10 necesito antes HU-03 y HU-04, porque duración, estadísticas y orden son cálculos sobre canciones ya agregadas y visibles.
 - Para HU-06 necesito antes HU-03, porque solo puedo quitar una canción que ya fue agregada.
 
+
 ## Mi reto técnico principal
-La HU que más me intimida es HU-09 (estadísticas) porque calcular el género más frecuente y el artista más repetido implica lógica de conteo/agregación (contar ocurrencias, comparar máximos, decidir qué hacer en caso de empate) y depende de que los datos de género vengan bien desde la API de iTunes.
+La HU que más me costó fue **HU-01** (buscar canciones): aunque ya había usado async/await y fetch antes, aquí tuve que integrar varias piezas nuevas juntas por primera vez en este proyecto — conectar la API real de iTunes, crear una clase (`CancionSetList`) para transformar los datos crudos, y manejar los 3 estados de búsqueda (carga, error, sin resultados) — siendo además la historia que sentó las bases de todo el resto del proyecto.

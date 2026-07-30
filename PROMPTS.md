@@ -442,3 +442,34 @@ Mismo modo de trabajo que en historias anteriores: preguntas estratégicas antes
 Mismas restricciones que las historias anteriores, aplicadas ahora solo a HU-08.
 
 **Resultado:** En `mostrarDetallePlaylist()` (ui.js) se agregó el cálculo de duración total con `.reduce()` (sumando `cancion.duracion` de todas las canciones), y una nueva función `formatearDuracionTotal()` que convierte milisegundos a formato "X h Y min" o "X min". Se actualiza automáticamente porque el detalle completo se vuelve a renderizar cada vez que cambia el estado.
+
+
+
+## [2026-07-29] — Desarrollo de la novena historia de usuario
+
+**Para qué:** Continuar el Sprint 2, ahora con la HU-09.
+
+**Prompt:**
+
+[HISTORIA DE USUARIO]
+
+### HU-09: Ver estadísticas de una playlist
+**Como** usuario de Mi Setlist,
+**quiero** ver la cantidad de canciones, el género más frecuente y el artista más repetido de una playlist,
+**para** entender mejor la composición de mi música.
+
+**Criterios de aceptación:**
+- Al abrir el detalle de una playlist, se muestra la cantidad total de canciones que contiene.
+- Se muestra el género más frecuente entre las canciones de la playlist.
+- Se muestra el artista que más se repite en la playlist.
+- Si la playlist está vacía o los datos no permiten calcular una estadística, se muestra un estado amigable en lugar de un valor incorrecto o vacío.
+
+[MODO DE TRABAJO]
+
+Mismo modo de trabajo que en historias anteriores: preguntas estratégicas antes de código, luego código en porciones pequeñas con explicación y archivo de destino.
+
+[RESTRICCIONES]
+
+Mismas restricciones que las historias anteriores, aplicadas ahora solo a HU-09.
+
+**Resultado:** Se agregó `encontrarMasFrecuentes()` en `ui.js`, que cuenta ocurrencias con un objeto (`conteo[valor]`), encuentra el máximo con `Math.max(...Object.values())`, y devuelve todos los empatados con `.filter()` + `.join(', ')` (decisión: mostrar todos los empatados en vez de elegir uno arbitrariamente). Se usó en `mostrarDetallePlaylist()` para mostrar cantidad de canciones, género(s) más frecuente(s) y artista(s) más frecuente(s).
