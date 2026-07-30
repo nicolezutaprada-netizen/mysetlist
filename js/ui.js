@@ -418,8 +418,18 @@ function mostrarDetallePlaylist(playlist) {
     });
   
     detallePlaylist.appendChild(ul); //UL SE SUBIO A DETALLEPLAYLIST
-      detallePlaylist.scrollIntoView({ behavior: 'smooth', block: 'start' });
+   detallePlaylist.appendChild(ul); //UL SE SUBIO A DETALLEPLAYLIST
+
+    // scroll suave hasta el detalle, dentro del contenedor principal que tiene el scroll propio
+    setTimeout(() => {
+        const contenedor = document.querySelector('.contenido-principal');
+        contenedor.scrollTo({
+            top: detallePlaylist.offsetTop,
+            behavior: 'smooth'
+        });
+    }, 100);
 }
+
 
 function iniciarApp() {
     const resultadoCarga = cargarDeLocalStorage();
