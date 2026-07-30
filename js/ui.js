@@ -155,22 +155,24 @@ function mostrarResultados(canciones) {  // foreach:por cada element, ejecuta es
         // busca el botón "Agregar" dentro de este li específico
         const btnAgregar = li.querySelector('.btnagregar');  
 
-        // busca el select de playlists dentro de este li específico
-        const selectPlaylist = li.querySelector('.selectplaylist');  //slectplaylist q se genera en el inner de arriba
+    // busca el select de playlists dentro de este li específico 
+const selectPlaylist = li.querySelector('.selectplaylist'); //selectplaylist q se genera en el inner de arriba
 
-        //focus:cuando entras o seleccionas el <select>(no es elegir una opción; es q selector quedó activo.)
-        selectPlaylist.addEventListener('focus', () => {   
-           // focus: desktop — touchstart: móvil
-    const actualizarOpciones = () => {
+// actualiza las opciones del select con las playlists existentes
+const actualizarOpciones = () => {
     const opcionesActualizadas = obtenerPlaylists()
         .map(p => `<option value="${p.id}">${p.nombrePlaylist}</option>`)
         .join('');
-    selectPlaylist.innerHTML = `<option value="">Elige una playlist</option>${opcionesActualizadas}`;
+
+    selectPlaylist.innerHTML = `
+        <option value="">Elige una playlist</option>
+        ${opcionesActualizadas}
+    `;
 };
 
+// focus: desktop — touchstart: móvil
 selectPlaylist.addEventListener('focus', actualizarOpciones);
 selectPlaylist.addEventListener('touchstart', actualizarOpciones);
-        });
 
         btnAgregar.addEventListener('click', () => {
             const playlistId = selectPlaylist.value;

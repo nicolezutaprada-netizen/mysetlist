@@ -5,7 +5,7 @@
 //llama a la API de iTunes 
 import {CancionSetList} from './models/Cancion.js'; 
 const URLAPI='https://itunes.apple.com/search';
-const Limiteresultado=10;
+const Limiteresultado=50;
 
 //https://itunes.apple.com/search?term=harry%20styles&entity=song&limit=10
 
