@@ -416,8 +416,9 @@ function mostrarDetallePlaylist(playlist) {
 
         ul.appendChild(li);  //LI SE SUBIO A UL
     });
-
+  
     detallePlaylist.appendChild(ul); //UL SE SUBIO A DETALLEPLAYLIST
+      detallePlaylist.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function iniciarApp() {
