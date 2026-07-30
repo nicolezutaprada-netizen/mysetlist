@@ -160,12 +160,16 @@ function mostrarResultados(canciones) {  // foreach:por cada element, ejecuta es
 
         //focus:cuando entras o seleccionas el <select>(no es elegir una opción; es q selector quedó activo.)
         selectPlaylist.addEventListener('focus', () => {   
-            //Agrega la playlist q acabas de crear despeus de buscar songs a la lista de playslists
-            const opcionesActualizadas = obtenerPlaylists()  //viejas + nuevas playlists 
-                .map(p => `<option value="${p.id}">${p.nombrePlaylist}</option>`)
-                .join('');
-            //se agrega otra vez elige una opcion y el value vacio porque inner borra todo lo q estaba antes y si no se pone otra vez, no aparece
-            selectPlaylist.innerHTML = `<option value="">Elige una playlist</option>${opcionesActualizadas}`; 
+           // focus: desktop — touchstart: móvil
+    const actualizarOpciones = () => {
+    const opcionesActualizadas = obtenerPlaylists()
+        .map(p => `<option value="${p.id}">${p.nombrePlaylist}</option>`)
+        .join('');
+    selectPlaylist.innerHTML = `<option value="">Elige una playlist</option>${opcionesActualizadas}`;
+};
+
+selectPlaylist.addEventListener('focus', actualizarOpciones);
+selectPlaylist.addEventListener('touchstart', actualizarOpciones);
         });
 
         btnAgregar.addEventListener('click', () => {
