@@ -10,6 +10,7 @@ export class CancionSetList{
         this.caratula=datoscancion.artworkUrl100;
         this.duracion=datoscancion.trackTimeMillis;
         this.genero=datoscancion.primaryGenreName;
+        this.preview = datoscancion.previewUrl || null; // URL del preview de 30 segundos
         this.fecha = new Date(); //Crea la hora del momento
     }
 }

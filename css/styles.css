@@ -1,0 +1,719 @@
+/* ==============================================
+   FUENTE (Poppins de Google Fonts)
+   ============================================== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ==============================================
+   RESET: elimina estilos por defecto del navegador
+   ============================================== */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+ul { list-style: none; }
+img { display: block; max-width: 100%; }
+button { font-family: inherit; cursor: pointer; border: none; }
+input, select { font-family: inherit; outline: none; border: none; }
+
+/* ==============================================
+   VARIABLES DE COLOR (paleta Spotify)
+   ============================================== */
+:root {
+    --bg-base: #121212;
+    --bg-elevado: #181818;
+    --bg-hover: #282828;
+    --bg-input: #242424;
+    --sidebar-bg: #000000;
+    --texto-principal: #FFFFFF;
+    --texto-secundario: #B3B3B3;
+    --texto-tenue: #6A6A6A;
+    --acento: #1DB954;
+    --acento-hover: #1ED760;
+    --peligro: #F15E6C;
+    --borde-sutil: #2A2A2A;
+    --radio: 8px;
+    --radio-pill: 500px;
+    --transicion: 0.15s ease;
+    --sidebar-ancho: 280px;
+}
+
+/* ==============================================
+   BASE
+   ============================================== */
+body {
+    background-color: var(--bg-base);
+    color: var(--texto-principal);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    height: 100vh;
+    overflow: hidden;
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+}
+
+h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--texto-secundario);
+    margin-bottom: 1rem;
+}
+
+h3 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.02em;
+}
+
+/* ==============================================
+   LAYOUT DE 2 COLUMNAS
+   ============================================== */
+.app-layout {
+    display: grid;
+    grid-template-columns: var(--sidebar-ancho) 1fr;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ==============================================
+   SIDEBAR (columna izquierda)
+   ============================================== */
+.sidebar {
+    background-color: var(--sidebar-bg);
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    border-right: 1px solid var(--borde-sutil);
+}
+
+.sidebar h1 {
+    padding: 0 0.5rem;
+}
+
+.seccion-playlists h2 {
+    padding: 0 0.5rem;
+}
+
+.crear-playlist {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.crear-playlist input[type="text"] {
+    max-width: 100%;
+    font-size: 0.85rem;
+    padding: 0.6rem 1rem;
+    background-color: var(--bg-input);
+    color: var(--texto-principal);
+    border-radius: var(--radio-pill);
+}
+
+.crear-playlist input[type="text"]::placeholder {
+    color: var(--texto-secundario);
+}
+
+.crear-playlist button {
+    font-size: 0.8rem;
+    padding: 0.6rem 1rem;
+    background-color: var(--acento);
+    color: #000;
+    border-radius: var(--radio-pill);
+    font-weight: 600;
+    transition: background-color var(--transicion), transform 0.1s ease;
+}
+
+.crear-playlist button:hover {
+    background-color: var(--acento-hover);
+    transform: scale(1.04);
+}
+
+#mensajeplaylist {
+    color: var(--texto-secundario);
+    font-size: 0.75rem;
+    padding: 0 0.5rem;
+    margin-bottom: 0.5rem;
+    min-height: 1rem;
+}
+
+#listaplaylists {
+    margin-top: 0.5rem;
+}
+
+#listaplaylists li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--radio);
+    margin-bottom: 0.25rem;
+    transition: background-color var(--transicion);
+    cursor: pointer;
+}
+
+#listaplaylists li:hover {
+    background-color: var(--bg-hover);
+}
+
+#listaplaylists li span {
+    color: var(--texto-principal);
+    font-weight: 500;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#listaplaylists li span::before {
+    content: '♫';
+    color: var(--acento);
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.btn-eliminar {
+    background-color: transparent;
+    color: var(--texto-secundario);
+    padding: 0.3rem 0.6rem;
+    font-size: 0.7rem;
+    border: 1px solid var(--borde-sutil);
+    border-radius: var(--radio-pill);
+    opacity: 0;
+    transition: opacity var(--transicion), background-color var(--transicion), color var(--transicion);
+    flex-shrink: 0;
+}
+
+#listaplaylists li:hover .btn-eliminar {
+    opacity: 1;
+}
+
+.btn-eliminar:hover {
+    background-color: var(--peligro) !important;
+    color: var(--texto-principal) !important;
+    border-color: var(--peligro) !important;
+    transform: none !important;
+}
+
+/* ==============================================
+   CONTENIDO PRINCIPAL (columna derecha)
+   ============================================== */
+.contenido-principal {
+    overflow-y: auto;
+    padding: 2rem;
+    background: linear-gradient(180deg, #1a1a2e 0%, var(--bg-base) 300px);
+}
+
+/* ==============================================
+   BARRA DE BUSQUEDA
+   ============================================== */
+.barra-busqueda {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.barra-busqueda input[type="text"] {
+    background-color: var(--bg-input);
+    color: var(--texto-principal);
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radio-pill);
+    font-size: 0.9rem;
+    width: 100%;
+    max-width: 400px;
+    transition: background-color var(--transicion);
+}
+
+.barra-busqueda input[type="text"]:focus {
+    background-color: var(--bg-hover);
+}
+
+.barra-busqueda input[type="text"]::placeholder {
+    color: var(--texto-secundario);
+}
+
+.barra-busqueda button {
+    background-color: var(--acento);
+    color: #000000;
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--radio-pill);
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: background-color var(--transicion), transform 0.1s ease;
+    flex-shrink: 0;
+}
+
+.barra-busqueda button:hover {
+    background-color: var(--acento-hover);
+    transform: scale(1.04);
+}
+
+#mensajebusqueda {
+    color: var(--texto-secundario);
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    min-height: 1rem;
+}
+
+/* ==============================================
+   GRID DE GENEROS
+   ============================================== */
+.generos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.genero-card {
+    background-color: var(--color-genero, var(--bg-elevado));
+    color: var(--texto-principal);
+    padding: 1.25rem 1rem;
+    border-radius: var(--radio);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
+    user-select: none;
+    min-height: 80px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.genero-card:hover {
+    transform: scale(1.04);
+    filter: brightness(1.15);
+}
+
+.genero-card:active {
+    transform: scale(0.98);
+}
+
+
+
+#listatendencias {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+#listatendencias li {
+    background-color: var(--bg-elevado);
+    border-radius: var(--radio);
+    padding: 1rem;
+    transition: background-color var(--transicion);
+    cursor: pointer;
+}
+
+#listatendencias li:hover {
+    background-color: var(--bg-hover);
+}
+
+.tendencia-card img {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 4px;
+    object-fit: cover;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.tendencia-card .cancion-titulo {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--texto-principal);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.25rem;
+}
+
+.tendencia-card .cancion-artista {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--texto-secundario);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ==============================================
+   FILAS DE CANCION
+   ============================================== */
+#listaresultados li,
+#detalleplaylist ul li {
+    display: grid;
+    grid-template-columns: 50px 1fr auto auto auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.65rem 1rem;
+    border-radius: var(--radio);
+    margin-bottom: 0.25rem;
+    transition: background-color var(--transicion);
+}
+
+#listaresultados li:hover,
+#detalleplaylist ul li:hover {
+    background-color: var(--bg-hover);
+}
+
+#listaresultados li img,
+#detalleplaylist ul li img {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.cancion-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.cancion-titulo {
+    color: var(--texto-principal);
+    font-weight: 500;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cancion-artista {
+    color: var(--texto-secundario);
+    font-size: 0.78rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cancion-fecha {
+    color: var(--texto-tenue);
+    font-size: 0.7rem;
+    margin-top: 2px;
+}
+
+.cancion-duracion {
+    color: var(--texto-secundario);
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.selectplaylist {
+    max-width: 150px;
+    background-color: var(--bg-input);
+    color: var(--texto-principal);
+    padding: 0.4rem 2rem 0.4rem 0.75rem;
+    border-radius: var(--radio-pill);
+    font-size: 0.78rem;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23B3B3B3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    transition: background-color var(--transicion);
+}
+
+.selectplaylist:hover {
+    background-color: var(--bg-hover);
+}
+
+#listaresultados li .btnagregar,
+#detalleplaylist ul li .btn-quitar-cancion {
+    opacity: 0;
+    transition: opacity var(--transicion);
+    background-color: transparent;
+    color: var(--texto-secundario);
+    padding: 0.35rem 0.85rem;
+    font-size: 0.75rem;
+    border: 1px solid var(--borde-sutil);
+    border-radius: var(--radio-pill);
+}
+
+#listaresultados li:hover .btnagregar,
+#detalleplaylist ul li:hover .btn-quitar-cancion,
+#listaresultados li:focus-within .btnagregar,
+#detalleplaylist ul li:focus-within .btn-quitar-cancion {
+    opacity: 1;
+}
+
+#listaresultados li .btnagregar:hover {
+    background-color: var(--acento);
+    color: #000;
+    border-color: var(--acento);
+    transform: none;
+}
+
+#detalleplaylist ul li .btn-quitar-cancion:hover {
+    background-color: var(--peligro);
+    color: var(--texto-principal);
+    border-color: var(--peligro);
+    transform: none;
+}
+
+/* ==============================================
+   DETALLE DE PLAYLIST
+   ============================================== */
+#detalleplaylist {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--borde-sutil);
+}
+
+#detalleplaylist h3 {
+    color: var(--texto-principal);
+}
+
+#detalleplaylist > p {
+    color: var(--texto-secundario);
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+}
+
+#detalleplaylist select {
+    background-color: var(--bg-input);
+    color: var(--texto-principal);
+    padding: 0.45rem 2rem 0.45rem 1rem;
+    border-radius: var(--radio-pill);
+    font-size: 0.82rem;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23B3B3B3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.6rem center;
+    margin: 1rem 0;
+    transition: background-color var(--transicion);
+}
+
+#detalleplaylist select:hover {
+    background-color: var(--bg-hover);
+}
+
+#detalleplaylist ul {
+    margin-top: 0.5rem;
+}
+
+/* ==============================================
+   MODAL
+   ============================================== */
+#modal-confirmacion {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+}
+
+.modal-contenido {
+    background-color: var(--bg-elevado);
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 380px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+    animation: slideUp 0.25s ease;
+}
+
+#mensaje-modal {
+    color: var(--texto-principal);
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+}
+
+.modal-botones {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.modal-botones button {
+    padding: 0.65rem 1.5rem;
+    font-size: 0.85rem;
+}
+
+#btn-cancelar-modal {
+    background-color: transparent;
+    color: var(--texto-principal);
+    border: 1px solid var(--texto-secundario);
+}
+
+#btn-cancelar-modal:hover {
+    background-color: var(--bg-hover);
+    border-color: var(--texto-principal);
+    transform: none;
+}
+
+
+
+
+#miniplayer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #181818;
+    border-top: 1px solid #282828;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 999;
+}
+
+#miniplayer img {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.miniplayer-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.miniplayer-info strong {
+    color: #FFFFFF;
+    font-size: 0.9rem;
+}
+
+.miniplayer-info span {
+    color: #B3B3B3;
+    font-size: 0.78rem;
+}
+
+#miniplayer-btn {
+    background: transparent;
+    color: #FFFFFF;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: color 0.15s ease;
+}
+
+#miniplayer-btn:hover {
+    color: #1DB954;
+    transform: scale(1.1);
+}
+
+.miniplayer-barra {
+    width: 100%;
+    height: 3px;
+    background-color: var(--bg-hover);
+    border-radius: 2px;
+    margin-top: 0.4rem;
+    overflow: hidden;
+}
+
+.miniplayer-progreso {
+    height: 100%;
+    width: 0%;
+    background-color: var(--acento);
+    border-radius: 2px;
+    transition: width 0.5s linear;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==============================================
+   SCROLLBAR personalizado
+   ============================================== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg-hover); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--texto-tenue); }
+
+/* ==============================================
+   RESPONSIVE (movil)
+   ============================================== */
+@media (max-width: 700px) {
+    body { overflow: auto; }
+
+    .app-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+        overflow: visible;
+    }
+
+    .sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--borde-sutil);
+        padding: 1rem;
+    }
+
+    .contenido-principal {
+        padding: 1rem;
+        background: var(--bg-base);
+    }
+
+    .generos-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    #listaresultados li,
+    #detalleplaylist ul li {
+        grid-template-columns: 40px 1fr auto;
+        grid-template-areas:
+            "img info duracion"
+            "img acciones acciones";
+        gap: 0.6rem;
+        padding: 0.6rem;
+    }
+
+    #listaresultados li img,
+    #detalleplaylist ul li img {
+        width: 40px;
+        height: 40px;
+        grid-area: img;
+    }
+
+    .cancion-info { grid-area: info; }
+    .cancion-duracion { grid-area: duracion; }
+
+    .selectplaylist,
+    .btnagregar,
+    .btn-quitar-cancion {
+        grid-area: acciones;
+        opacity: 1 !important;
+        max-width: 100%;
+    }
+}

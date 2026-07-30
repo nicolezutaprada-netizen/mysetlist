@@ -4,45 +4,101 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My-setlist</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
- <h1>🎵 Mi Setlist </h1>
-<section>
-    <input type="text" id="inputbusqueda" placeholder="Buscar por artista o título">
-    <button id="btnbuscar"> Buscar</button>
-    <p id="mensajebusqueda">  </p>     <!-- Aquí se mostrará el estado: cargando, error, sin resultados -->
-    <ul id="listaresultados"> </ul>          <!-- Aquí se mostrarán los resultados de la búsqueda -->
-</section>
 
-<!-- Gestión de playlists (HU-02) -->
-<section>
-    <h2>Mis Playlists</h2>
-    <input type="text" id="nombreplaylist" placeholder="Nombre de la playlist">
-    <button id="btncrearplaylist">Crear playlist</button>
+    <!-- LAYOUT PRINCIPAL: sidebar izquierda + contenido derecha -->
+    <div class="app-layout">
 
-    <p id="mensajeplaylist"></p> <!-- para el mensaje de validación (nombre vacío) -->
+        <!-- ===== SIDEBAR IZQUIERDA ===== -->
+        <aside class="sidebar">
+            <h1>🎵 Mi Setlist</h1>
 
-    
-    <ul id="listaplaylists">  <!-- aquí se mostrarán las playlists creadas --> </ul> 
+            <!-- Gestión de playlists (HU-02) -->
+            <section class="seccion-playlists">
+                <h2>Mis Playlists</h2>
+                <div class="crear-playlist">
+                    <input type="text" id="nombreplaylist" placeholder="Nombre de la playlist">
+                    <button id="btncrearplaylist">Crear playlist</button>
+                </div>
 
+                <p id="mensajeplaylist"></p> <!-- para el mensaje de validación (nombre vacío) -->
 
-     <div id="detalleplaylist"></div>   <!-- Detalle de la playlist seleccionada (HU-04) -->
+                <ul id="listaplaylists">  <!-- aquí se mostrarán las playlists creadas --> </ul>
+            </section>
+        </aside>
 
-</section>
+        <!-- ===== CONTENIDO PRINCIPAL DERECHA ===== -->
+        <main class="contenido-principal">
 
+            <!-- Búsqueda -->
+            <section class="seccion-busqueda">
+                <div class="barra-busqueda">
+                    <input type="text" id="inputbusqueda" placeholder="Buscar por artista o título">
+                    <button id="btnbuscar">Buscar</button>
+                </div>
+                <p id="mensajebusqueda"></p>     <!-- Aquí se mostrará el estado: cargando, error, sin resultados -->
 
-<!-- Modal de confirmación genérico (HU-06 / HU-07) -->
-<div id="modal-confirmacion" style="display: none;">  <!-- Modal oculto por defecto de display:none -->
-    <p id="mensaje-modal"></p>
-    <button id="btn-confirmar-modal">Confirmar</button>
-    <button id="btn-cancelar-modal">Cancelar</button>
+                <button id="btnvolver" style="display:none;">← Volver</button> <!-- oculto por defecto, aparece al buscar -->
+                <ul id="listaresultados"></ul>          <!-- Aquí se mostrarán los resultados de la búsqueda -->
+            </section>
+
+            <!-- Géneros musicales -->
+            <section class="seccion-descubre">
+                <h2 class="seccion-titulo">Géneros musicales</h2>
+
+                <!-- Géneros rápidos (clickear lanza búsqueda) -->
+                <div class="generos-grid" id="generosGrid">
+                    <div class="genero-card" style="--color-genero: #E13300;" data-termino="Pop">🎵 Pop</div>
+                    <div class="genero-card" style="--color-genero: #1E3264;" data-termino="Rock">🎸 Rock</div>
+                    <div class="genero-card" style="--color-genero: #8400E7;" data-termino="Reggaeton">🔥 Reggaeton</div>
+                    <div class="genero-card" style="--color-genero: #006450;" data-termino="Latin">💃 Latin</div>
+                    <div class="genero-card" style="--color-genero: #E8115B;" data-termino="R&B">🎤 R&B</div>
+                    <div class="genero-card" style="--color-genero: #BC5900;" data-termino="Hip-Hop">🎧 Hip-Hop</div>
+                    <div class="genero-card" style="--color-genero: #477D95;" data-termino="Electronic">⚡ Electronic</div>
+                    <div class="genero-card" style="--color-genero: #537AA1;" data-termino="Jazz">🎷 Jazz</div>
+                </div>
+            </section>
+
+            <!-- Canciones más escuchadas (se llena automáticamente al cargar) -->
+            <section class="seccion-tendencias">
+                <h2 class="seccion-titulo">Canciones más escuchadas</h2>
+                <ul id="listatendencias"></ul> <!-- se llenará automáticamente al cargar -->
+            </section>
+
+            <!-- Detalle de la playlist seleccionada (HU-04) -->
+            <div id="detalleplaylist"></div>
+
+        </main>
+
+    </div>
+
+    <!-- Mini-player de reproducción (aparece al reproducir una canción) -->
+   <div id="miniplayer" style="display:none;">
+    <img id="miniplayer-caratula" src="" alt="Carátula">
+    <div class="miniplayer-info">
+        <strong id="miniplayer-titulo"></strong>
+        <span id="miniplayer-artista"></span>
+        <div class="miniplayer-barra">
+            <div class="miniplayer-progreso" id="miniplayer-progreso"></div>
+        </div>
+    </div>
+    <button id="miniplayer-btn">⏸</button>
 </div>
 
+    <!-- Modal de confirmación genérico (HU-06 / HU-07) -->
+    <div id="modal-confirmacion" style="display: none;">  <!-- Modal oculto por defecto de display:none -->
+        <div class="modal-contenido">
+            <p id="mensaje-modal"></p>
+            <div class="modal-botones">
+                <button id="btn-confirmar-modal">Confirmar</button>
+                <button id="btn-cancelar-modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
 
-
-
-<script type="module" src="js/app.js"></script> 
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>
-
