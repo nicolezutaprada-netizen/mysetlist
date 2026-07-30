@@ -644,6 +644,21 @@ h3 {
     transition: width 0.5s linear;
 }
 
+
+#miniplayer-cerrar {
+    background: transparent;
+    color: var(--texto-secundario);
+    font-size: 1.1rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 50%;
+    transition: color 0.15s ease;
+}
+
+#miniplayer-cerrar:hover {
+    color: var(--texto-principal);
+    transform: scale(1.1);
+}
+
 @keyframes fadeIn { 
     from { opacity: 0; }
     to { opacity: 1; }

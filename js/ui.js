@@ -26,6 +26,7 @@ const miniplayerCaratula = document.querySelector('#miniplayer-caratula');
 const miniplayerTitulo = document.querySelector('#miniplayer-titulo');
 const miniplayerArtista = document.querySelector('#miniplayer-artista');
 const miniplayerBtn = document.querySelector('#miniplayer-btn');
+const miniplayerCerrar = document.querySelector('#miniplayer-cerrar'); // botón X para cerrar el miniplayer
 
 // botón pausa/play del miniplayer
 miniplayerBtn.addEventListener('click', () => {
@@ -36,6 +37,13 @@ miniplayerBtn.addEventListener('click', () => {
         audioReproductor.pause();
         miniplayerBtn.textContent = '▶';
     }
+});
+
+// botón X: detiene la canción y oculta el miniplayer aunque no haya terminado el preview
+miniplayerCerrar.addEventListener('click', () => {
+    audioReproductor.pause(); // detiene el audio
+    audioReproductor.currentTime = 0; // lo reinicia al inicio
+    miniplayer.style.display = 'none'; // oculta el miniplayer
 });
 
 // función para reproducir una canción y actualizar el miniplayer
@@ -155,24 +163,23 @@ function mostrarResultados(canciones) {  // foreach:por cada element, ejecuta es
         // busca el botón "Agregar" dentro de este li específico
         const btnAgregar = li.querySelector('.btnagregar');  
 
-    // busca el select de playlists dentro de este li específico 
-const selectPlaylist = li.querySelector('.selectplaylist'); //selectplaylist q se genera en el inner de arriba
+        // busca el select de playlists dentro de este li específico
+        const selectPlaylist = li.querySelector('.selectplaylist');  //slectplaylist q se genera en el inner de arriba
 
-// actualiza las opciones del select con las playlists existentes
-const actualizarOpciones = () => {
-    const opcionesActualizadas = obtenerPlaylists()
-        .map(p => `<option value="${p.id}">${p.nombrePlaylist}</option>`)
-        .join('');
+        //focus:cuando entras o seleccionas el <select>(no es elegir una opción; es q selector quedó activo.)
+        //click:cuando presionas el botón Agregar.
+        // focus: desktop — touchstart: móvil (en móvil el focus no siempre dispara antes del desplegable nativo)
+        const actualizarOpciones = () => {
+            //Agrega la playlist q acabas de crear despeus de buscar songs a la lista de playslists
+            const opcionesActualizadas = obtenerPlaylists()  //viejas + nuevas playlists 
+                .map(p => `<option value="${p.id}">${p.nombrePlaylist}</option>`)
+                .join('');
+            //se agrega otra vez elige una opcion y el value vacio porque inner borra todo lo q estaba antes y si no se pone otra vez, no aparece
+            selectPlaylist.innerHTML = `<option value="">Elige una playlist</option>${opcionesActualizadas}`;
+        };
 
-    selectPlaylist.innerHTML = `
-        <option value="">Elige una playlist</option>
-        ${opcionesActualizadas}
-    `;
-};
-
-// focus: desktop — touchstart: móvil
-selectPlaylist.addEventListener('focus', actualizarOpciones);
-selectPlaylist.addEventListener('touchstart', actualizarOpciones);
+        selectPlaylist.addEventListener('focus', actualizarOpciones);
+        selectPlaylist.addEventListener('touchstart', actualizarOpciones);
 
         btnAgregar.addEventListener('click', () => {
             const playlistId = selectPlaylist.value;
