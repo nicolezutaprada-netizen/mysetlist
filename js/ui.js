@@ -170,6 +170,31 @@ function formatearDuracionTotal(ms) { //mlseg entre mil, math.floor:quita decima
 
 
 
+function encontrarMasFrecuentes(array) {
+    const conteo = {};//objeto vacio para contar cuántas veces aparece cada valor en el array
+
+    array.forEach(valor => {
+        //cada que aparece "Rock" en el array de generos, +1 a su contador y vas llevando la cuenta de cuántas veces se repite.
+        // se usa [valor] y no .valor  porque .valor busca una propiedad ,  [valor] mira el contenido de la variable.  
+        conteo[valor] = (conteo[valor] || 0) + 1;//si lo de la izquierda no existe (es undefined), usa lo de la derecha (0). 
+    });
+
+
+
+    //object.values:agarra valores de objeto=> {rock:1, pop:2} agarra solo 1 y 2, rock es nombre propiedad
+    //math.max:encuentra num mas grande
+    const maxima = Math.max(...Object.values(conteo));
+
+    //object.keys: saca solo los nombres del obj=>{rock:1, pop:2} agarra rock  y pop
+    //filter devuelve nombres cuyo conteo sea igual al máximo,si hay empate, quedan varios nombres, no solo uno.
+    const masFrecuentes = Object.keys(conteo).filter(valor => conteo[valor] === maxima);
+
+    return masFrecuentes.join(', '); //["Rock", "Pop"].join(', ') → "Rock, Pop".
+
+}
+
+
+
 
 btnCrearPlaylist.addEventListener('click', manejarCrearPlaylist);
 
@@ -230,6 +255,7 @@ function renderizarPlaylists() {
 
 const detallePlaylist = document.querySelector('#detalleplaylist'); // referencia al contenedor de detalle de playlist
 
+
 function mostrarDetallePlaylist(playlist) {
     detallePlaylist.innerHTML = ''; // limpia el detalle anterior
 
@@ -251,6 +277,19 @@ function mostrarDetallePlaylist(playlist) {
     const parrafoDuracion = document.createElement('p');
     parrafoDuracion.textContent = `Duración total: ${formatearDuracionTotal(duracionTotalMs)}`;
     detallePlaylist.appendChild(parrafoDuracion);
+
+    //HU-09: estadísticas de la playlist (cantidad, género más frecuente, artista más frecuente)
+    const cantidadCanciones = playlist.canciones.length; //cantidad total de canciones
+
+    const generos = playlist.canciones.map(c => c.genero); //array con solo los géneros de cada canción
+    const generoMasFrecuente = encontrarMasFrecuentes(generos); //usa la función de conteo para saber cuál se repite más
+
+    const artistas = playlist.canciones.map(c => c.artista); //array con solo los artistas de cada canción
+    const artistaMasFrecuente = encontrarMasFrecuentes(artistas); //misma función, pero con artistas
+
+    const parrafoEstadisticas = document.createElement('p');
+    parrafoEstadisticas.textContent = `${cantidadCanciones} canciones · Género: ${generoMasFrecuente} · Artista: ${artistaMasFrecuente}`;
+    detallePlaylist.appendChild(parrafoEstadisticas);
 
 
 //para cuando el usuario dee click en mostrar detalle
