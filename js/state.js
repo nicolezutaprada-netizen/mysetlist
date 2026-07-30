@@ -25,7 +25,6 @@ export function crearPlaylist(nombre) {
 
 
 
-
 export function agregarCancionAPlaylist(playlistId, cancion) {
 
 // find recorre hasta allar coincidencia y para
@@ -41,12 +40,18 @@ const cancionyaExiste = playlist.canciones.some(c => c.titulo === cancion.titulo
         return { exito: false, mensaje: 'Esta canción ya está agregada a la playlist' };
     }
 
+    //crea una copia de la canción con la fecha exacta en la que se agrega a la playlist
+    const cancionConFecha = {
+        ...cancion,
+        fecha: new Date()
+    };
+
     playlists = playlists.map(p => {
         if (p.id === playlistId) { // p playlist q se revisa de todo el array (map lo recorre)
              //..p:devuelve la palylist q se esta revisando
              //...p.canciones:devuelve el array de canciones q tiene la playlist q se esta revisando(canciones q ya tenía)
              //cancion:la cancion q se quiere agregar a la playlist q se esta revisando
-            return { ...p, canciones: [...p.canciones, cancion] }; 
+            return { ...p, canciones: [...p.canciones, cancionConFecha] }; 
             
         }
         return p; //se devuelve  la playlist que se revisa sin modificarlo si no es la playlist a la que se quiere agregar la canción
@@ -58,8 +63,6 @@ const cancionyaExiste = playlist.canciones.some(c => c.titulo === cancion.titulo
 
     return { exito: true, mensaje: 'Canción agregada' }; //solo si no entra al if
 }
-
-
 
 
 export function cargarDeLocalStorage() {
